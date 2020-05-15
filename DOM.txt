@@ -1,0 +1,248 @@
+webstorm 查找ctrl+f  替换ctrl+r
+
+函数嵌套调用，函数调用之后会返回它本身的函数调用点，然后执行函数调用点之后的代码
+
+
+获取DOM节点对象：
+    1.通过document对象方法
+                
+        document.getElementById() 
+          id和别的元素name不能相同(IE)
+                    
+         document.getElementsByTagName() 
+             返回标签的集合，伪数组，可通过下标找到节点
+          
+                  document.getElementByClassNane()   
+          返回使用同一类选择器名称的Html集合，伪数组，可通过下标找到节点 
+           可通过length查看找到几个对象                
+      document.getElementByName()
+       返回NodeList[]节点列表，也是伪数组。与HtmlCollection元素集合的区别是它可以使用ES6数组新增方法：foreach(),keys(),values()   
+
+   
+Input节点是单标签，与后面的文本是兄弟关系
+
+
+
+节点的获取与判断：
+hasChildNodes()判断是否有子节点
+true:有  false:无
+
+childNodes属性  返回所有子节点列表
+列表中的text节点是回车时产生的空文本节点(回车会产生一个空字符)
+
+childen属性与childNodes属性的区别是childen返回的集合中不包含空文本节点（兼容性）检测：can i use网站 
+
+childNodes.length属性 :返回节点列表的长度
+
+
+节点创建，添加：1.找到目标节点 2.创建元素节点 3.创建文本节点 4.元素节点.appendchild(文本节点) 5.目标节点.appendchild(元素节点)
+
+删除子节点：父节点.removeChild(子节点)
+
+DOM节点的标准属性
+      1.nodeName:
+           文档节点的nodeName为#documnemt
+           文本节点的nodeName为#text
+            其他元素节点的nodeName为标签名
+
+      2.nodeValue:
+                文档节点的nodeValue为null
+      3.nodeType :
+            文档节点  9
+            元素节点  1
+            属性节点  2   
+            文本节点  3
+        
+ 
+   属性节点：
+         获取：元素节点.attributes  返回元素属性集合
+                 getAttributeNode(属性名称).nodeName
+                 getAttributeNode(属性名称).nodeValue
+                  getAttribtreNode(属性名称).nodeType  //2
+                 getAttribute(name)：取得指定属性的值                  
+
+         设置：setAttribute(属性名称，值) ：设置指定属性的值
+                （有则改，无则添加） 
+
+  导航节点：parentNode 父节点
+            previousSibling  上一个兄弟节点
+            nextSibling  下一个兄弟节点
+            firstChild  第一个子节点
+            lastChaild  最后一个子节点  
+
+  
+   替换节点：父节点.replaceNode(新节点，旧结点)
+
+
+
+     当用网页中已经存在的节点去替换其他存在的节点时，执行的是剪切+替换功能。
+
+
+ 
+    插入节点：insertBefore(新节点，目标节点)//在目标节点前方插入
+    克隆/复制节点：节点.cloneNode(true/false)
+                        true:复制自己+所有子节点
+                        false:只复制自己 
+    注：克隆之后（保存在内存）还要添加到节点appendchild(节点.clone(true/false))。同时还会克隆标签的事件。但不会绑定“现代”绑定事件。
+
+
+   操作文本节点：
+           textNode.data=""  设置文本内容
+           appendData(string)  添加文本
+            deleteData(索引,删除长度)
+             insertData(索引,string) 
+               replaceData(索引,替换长度，string)     
+
+
+  js操作css样式
+          1.提前定义一个样式规则，通过修改class属性的值实现样式修改（不推荐）
+             
+          2.优化：通过字符串拼接的方式把新类名加到原来的类名之后，注意空格
+                 属性节点.nodeValue=/+=" "
+                 元素节点.className=/+=" " 
+
+         3.元素节点.style.css属性（驼峰命名）="值（与css中值一样）" 
+         4.元素.style.cssText="属性：值"
+
+        非IE：        document.defaulView.getComputedStyle(元素对象，null).属性
+         IE:    对象.currentStyle
+
+       注：以上两种方法只能获取属性，不能修改属性
+
+解决兼容性：if( 对象.currentStyle//对象.currentStyle===undefined
+)     {      }else{
+ document.defaulView.getComputedStyle(元素对象，null).属性
+}                    
+
+获取元素属性： 元素.id  元素.src 元素.value 元素.className
+
+
+有js交互的地方html结构中有交互的标签必须套一个盒子，即给需要交互的标签添加一个父标签。（包括交互的标签width:100%）.所有交互标签的整体位置移动操作父标签即可
+
+一般内联元素外套一个div，这样容易对内联元素进行操作
+
+一般要对span设置width，否则span自适应内容大小，文本不一致时会影响左右元素的排版。span设置宽度先display：inline-block,再设置span的左右边距，这样span与左右元素就有较好的排版。
+
+
+取消input的蓝色边框 input:focus{ outline:none }
+
+为节点添加事件：  对象.setAttribute("onclick","fun(this)")
+
+轮播时可用transform:translate  
+需要全局一个变量a=0;
+a+=1000/a-=1000。这时a的值已经改变。可重复改变a的值
+
+
+innerHtml:返回或设置元素内容，会把标签元素渲染成子元素
+
+删除所有节点 :  1.while(父节点.haschildnodes){ 父节点.removeChild.firstChild}
+             不能用for循环（删除之后第二个会变成第一个，而循环变量会自增，与数组去重一样）
+ 
+                2.元素.innerHtml=""
+
+
+创建新节点，为节点添加内容 节点.innerHtml
+
+父节点.innerHtml=`<div><span>${text}</span></div>`
+                    标签名会被浏览器渲染成html元素，并表现 
+
+
+innerHtml  innerText  outterHtml 的区别：
+
+innerText： 只返回纯文本，不包括后代的标签。
+若将含有标签的值用innerText在网页显示，不会渲染标签。会转义操作，返回标签本身
+
+outterHtml:包含元素本身及后代的所有内容.
+        obj.outterHtml=`<div>123</div>`
+           会改变obj原本的html标签
+
+
+
+rotateX()：x轴旋转
+roteteY(): y轴旋转
+rotate   :默认左上角旋转，旋转之后会改变位置
+
+改变高度：div：hover{height:auto;}
+          div:hover{overflow:visible}
+            会自动适应文本自身高度（每个li的子元素个数可以不一样）
+           但这样不能有过渡。应该计算具体高度值
+ 
+对于文本，可以用text-indent代替padding
+
+
+事件分类：
+    鼠标，键盘，页面html
+注：非字符键（功能键）不支持keypress
+    abort(页面中断)
+    resize(页面尺寸) 
+
+
+事件流：事件传播的方向，
+事件流分流：
+   事件冒泡（IE）：目标事件完成后，会依次触发其父级的事件（由内往外）
+   事件捕获：会依次触发其最高父级的事件（由外往内），最后再触发目标事件
+   DOM事件流：捕获阶段，目标阶段，冒泡阶段
+
+把一个具名的函数，赋值给对象的属性时，不加（）
+
+在传统事件绑定方法中，不能多次给一个事件赋值。后一个会覆盖前一个。（本质是函数表达式赋值）
+   
+传统事件绑定：任何浏览器都能兼容
+现代事件绑定方式：
+   1.DOM事件绑定：事件不加on true表示捕获流，false表示冒泡流
+          元素对象.addEventListener("click",function(){},boolean)
+
+     注：能多次给一个事件赋值。依顺序执行.可以删除任何一个函数。但如果删除事件，则要把所有函数都删除
+
+    2.IE事件绑定：
+          元素对象.attatchEvent(事件名，函数名) 注：事件加on，只支持冒泡流，IE低版本支持，IE11不支持
+
+   兼容性写法：if(元素对象.addEventListener){元素对象.addEventListener（"click",fn(){},true）}else{对象.attachEvent("onclick",fn(){})}
+
+   取消事件：传统：元素.onclick=null
+                    元素.removeAttribute("onclick") 
+            现代： 兼容性写法：if(元素对象.removeEventListener){元素对象.removeEventListener（"click",fn(){},true）}else{对象.detachEvent("onclick",fn(){})}
+注：参数必须一致才能删除
+
+取消默认事件：
+    DOM：对象.preventDefault()
+    IE:  对象.returnValue=false  ||   function(){ return false}
+
+取消冒泡：
+    DOM: 对象e.stopPropagaction()
+    IE:   e.cancelBubble=true 
+
+
+
+事件对象event
+    创建：1.var e=window.event
+          2.对象.onclick=f(ev/event【IE】/argument[0]【非ie】)注：只能在事件绑定函数中做(事件函数第一个形参默认为事件对象)
+
+兼容写法：if(window.event){}else{argument[0]}  或者vare=window.event || ev || argument[0] （推荐）注：事件绑定函数
+
+  
+   常用属性：clientX:事件发生时鼠标在可视区的坐标
+             clientY: 
+
+              offsetX:事件发生时鼠标在元素内部的坐标
+              offsetY:
+
+               screenX: 件发生时鼠标在屏幕的坐标          
+               screenY:
+
+                pageX:事件发生时鼠标在网页的坐标
+                  pageY:
+    
+               target:事件发生时指向的对象
+
+               
+
+ audio和video是双标签             
+         
+ CSS3实现背景色渐变：
+1.线性渐变
+ background:linear-gradient()
+ background:repeating-linear-gradient()
+ 
+2.径向渐变
+   background:radial-gradient()
