@@ -1,0 +1,277 @@
+window对象：
+  
+     方法：   clientWidth:网页默认的总宽度
+              clientHeight:body的实际高度，如果body没有内容，则为body可视区高度
+
+
+
+注：Matn.radom()  [0,1)
+   var a= Matn.radom()*10 [0,10) //a若要每次都取整，则要
+            var a=Matn.round(Matn.radom()*10 [0,10))       
+
+
+window.open(url,新窗口名称，窗口属性（宽高等）):打开新窗口，返回新窗口对象newwindow（新窗口名称）
+
+window.close()：关闭当前浏览器对象的窗口。
+所以要关闭新打开的窗口应newwindow.close()
+
+history对象：
+     history.length:返回历史对象的长度
+     history.forward():前进一个页面
+     history.back（）:后退一个页面
+     history.go():跳到指定页面
+      0表示当前页面。1表示下一张 -1表示上一张
+
+
+location对象：地址栏对象
+
+console.log(location.href="指定页面")//获取完整的Yrl 
+       
+ location.assign(指定url)//实现跳转到指定的URL页面；生成2条历史记录
+ 
+ location.replace(url) //用指定的URL页面，替换当前页面；不生成新的历史记录。 长度还是1.
+
+location.reload()  //重载当前页面，相当于f5刷新页面
+ 
+
+Navigator对象：包含浏览器所有信息
+   navigator.userAgent
+    
+
+
+定时器:setTineOut(函数，时间)  单次   返回一个定时器对象
+       setInterVal（函数，时间） 循环  返回一个定时器对象
+
+清除定时器：clearTineOut(定时器对象)
+       cleaerInterVal（）
+
+定时器原理：
+
+
+表单对象：Form
+ 
+   1.获取表单对象
+           var f=document.getElemnetById("id名")
+           
+           var f= document.表单名（name属性）
+ 
+           var f= document.forms[0]     //document.forms返回所有表单集合
+          
+           var f=document.forms["name"]//IE
+
+   2.通过表单对象，拿表单域中的对象
+          （1）.var fd= document.getElemnetById("id名")
+
+           (2). var fd=f.elements[0]    // f.elements返回表单中表单域的集合
+           
+          （3）.var fd=f.elements["name"]
+
+           (4). var fd=f.name
+        
+           (5). var fd=f[0]
+
+
+  3.如何获取表单对象中的值
+
+       1.input输入框
+             var oForm = document.myform;
+              var userId = oForm[0].value;
+                oForm[0].value = "张三" //修改value值
+
+   
+               var userPwd = oForm[1].value;
+     
+               var sex = oForm['sex']; //单选 ，通过name来获取节点对象和value; 即是伪数组，也是对象。
+              console.log(sex)
+       console.log(sex[1])  //<input type="radio" name="sex" value="女">女
+        console.log(sex.value) //女
+     
+ 
+   单选的值：
+        var sexValue = oForm['sex'].value;
+
+   var likes = oForm['likes'];
+        var likes = oForm.likes;
+              var arrLikesValues = [];
+        for(var i = 0; i< likes.length; i++){
+            if(likes[i].checked === true){
+                arrLikesValues.push(likes[i].value)
+            }
+        }
+
+      直接获取下拉列表的值
+      var oSelect = oForm[5]
+        console.log(oSelect.value)
+       如何设置默认值
+        oSelect.value = '南京'
+        var options = oSelect.options
+          console.log(options[options.selectedIndex])  //<option value="上海">上海</option> 表示被选中的option节点对象
+          console.log(options[options.selectedIndex].value) //获取被选中项的值；
+     console.log(options[4].value) //获取指定下标元素的值
+                  删除选项：options[1]=null
+                            oSelect.remove(0)
+
+
+
+表单验证：
+        
+      表单项一定要写name        
+     onsumbit,onreset要放在form标签中
+       阻止默认行为：<form onsumbit="return check()"> check()返回true/false
+
+      传统验证，普通按钮提交时触发onsumbit事件，重置时触发onreset事件
+       传统表单验证：表单项中设置pattern属性加required属性。注：pattern中不加/ /
+    
+        js验证：
+             this.form.sumbit()方法不会触发onsumbit事件
+            this.form.reset()方法会触发传统onreset事件
+         
+        任何一个表单域对象.form属性，都返回当前的表单对象
+
+        1.逐一验证表单每一项，那一项不通过，就return,后面的验证就不执行。如果要兼容传统提交方式。就 return false.
+        2.同时验证：
+
+表单验证时间：
+        1.错误发生前：keyup,keypress,keydown事件   //如注册账号，检测用户名的合法性及重复
+        2.错误发生时；blur/change(前提，失去焦点，value发生改变)
+           
+        3.错误发生后:sumbit事件
+
+
+
+
+
+
+创建对象
+         1.听过new运算符，实例一个对象
+
+            var obj=new Object()
+            console.log(obj)//object     _proto_:原型对象指向Object
+       
+            注：=的左边是变量，右边是对象的地址。变量只是引用了对象的地址。
+
+             
+            var obj=new Object("123")
+        console.log(obj) // {"123"}    _proto_:原型对象指向String  Strin中_proto_指向object
+
+           var obj=new Object(123)
+        console.log(obj) // {123}    _proto_:原型对象指向Number  Number中_proto_指向object (基本数据类型对象的原型对象是从Object出来的)
+
+        注：通过new实例化对象的_ptoto_,指向实例化对象的原型对象；原型对象的_proto_都指向object.它是顶层对象,是所有对象的原型对象   
+          
+
+
+        conlose.log( 对象 instanceof（new 实例化） 原型名称 )
+bb                true表示对象指向原型，false不是 
+             conlose.log（arr instanceof Array）//true
+
+               true表示对象指向原型，false不是 
+             conlose.log（arr instanceof String）//false  
+
+           删除对象：  对象=null.(当一个对象没有变量来引用时，这个对象就被垃圾回收机制回收，释放内存)                 
+            删除对象属性：delete 对象.属性
+               conlose.log（对象.属性）//undefined(对象无这个属性)
+                                       注：变量没有初始化；函数无return也是返回undefined
+
+             删除对象方法：delete 对象.方法
+                conlose.log（对象.方法）//报错
+
+         2.通过字面量
+               var obj={}          
+               var s="123" 
+
+
+         3.通过工厂模式
+                   function
+               
+                 
+              
+         4.通过构造函数创建原型对象（条件1,2,3）(无参)
+             function Person（）{
+                   this.name="123"
+                    this.age=12
+     
+              }
+                 var obj=new Person()
+               1.函数名首字母大写
+               2.通过this表示对应实例化的对象（其他函数中的this表示调用这个函数的对象）
+               3.通过new来实例化一个原型对象。
+
+
+               4.动态添加方法或属性
+               obj.show=function(){}
+               注：obj动态添加的方法只能本身使用。要想所有实例化对象使用，在构造函数中添加。   构造函数中不使用var声明变量。直接this.变量          
+
+        
+  （有参）function Person（name，age）{
+                   this.name="123"
+                    this.age=12
+     
+              }
+                 var obj2=new Person("一页书"，600)
+
+
+二维数组：var arr=[
+                      []
+                      []
+                      []
+                          ]
+
+获取：arr[行][列]
+
+
+JSON对象的两种方法
+   1.JSON.stringify(obj) :把JSON对象转化成JSON格式的字符串
+   2.JSON.parse(str)  ：把JSON格式的字符串转化成JSON对象或者str=json.stringify(a) //a={}
+
+
+
+
+
+本地存储：(h5新增)，把数据存储在浏览器中（本地），不用放在服务器。仅限用一个域名下的页面可以访问。协议不同也不能访问。如;https://和http://。只有相对的协议加相同的域名，才能在不同页面访问本地存储
+
+f=本地存储分类：
+  1.localStorage  :长期本地存储
+   
+  2.sessionStorage  ：临时存储,每创建一个页面都有。当页面关闭时，sessionStorage 会被清除
+
+注：本地存储中键值对会一字符串形式（自动转化）保存。获取时注意转化格式
+  方法(添加)：1.window.sessionStorage.setItem(key,value)/键值对，value可以为"json对象"或者
+
+2.window.sessionStroage.key=value
+
+     （删除）：
+ sessionStorage.removeItem(key) 清除指定的键值
+  sessionStorage.clear() 清除所有
+
+       （获取）
+ sessionStorage.getItem(key)
+ sessionStoragr.key
+  
+注;localStorag具有相同的API
+
+本地存储可以在同一协议，域名的不同页面去操作localStorag的键值
+
+
+最初模拟数据在第一张页面就要初始化，并且一定要判断。否则每次刷新页面重新初始化
+
+重叠感：position:relative
+        z-index:4
+
+多个正则表达式同时验证必须单独写，每一个都判断一次。不能用&&连接多个正则表达式
+        
+
+
+null==undefined   true
+unll====undefined  false
+
+NaN!=*   true
+NaN==*   false
+
+全局函数：不属于任何对象的方法（parseInt,escape）
+alert属于window,表示全局函数
+
+类与伪类，元素与伪元素优先级相同
+
+
+重复声明相同实名函数，后面的会覆盖前面的
